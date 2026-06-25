@@ -2,12 +2,14 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 
+#ONE_MAX_LENGTH = 100 #длина подлежащей оптимизации битовой строки
 ONE_MAX_LENGTH = 100 #длина подлежащей оптимизации битовой строки
+MAX_FITNESS = 1275
 
 POPULATION_SIZE = 200 #количество индивидуумов в популяции
 P_CROSSOVER = 0.9 #вероятность скрещивания
 P_MUTATION = 0.1 #вероятность мутации индивидуума
-MAX_GENERATIONS = 40 #максимальное количество поколений
+MAX_GENERATIONS = 60 #максимальное количество поколений
 
 RANDOM_SEED = 142
 random.seed(RANDOM_SEED)
@@ -22,7 +24,9 @@ class Individual(list):
         self.fitness = FitnessMax()
 
 def oneMaxFitness(ind):
-    return sum(ind), # тюпл
+    m = [-x * (i - len(ind) / 2) if i > len(ind) / 2 else (len(ind) / 2 - i) * x for i, x in enumerate(ind)]
+    return sum(m),
+    #return sum(ind), # тюпл
 
 def individualCreator():
     return Individual(
@@ -69,7 +73,7 @@ def mutFlipBit(mtnt, indpb=0.01):
 
 fitnessValues = [individual.fitness.values[0] for individual in population]
 
-while max(fitnessValues) < ONE_MAX_LENGTH and generationCounter < MAX_GENERATIONS:
+while max(fitnessValues) < MAX_FITNESS and generationCounter < MAX_GENERATIONS:
     generationCounter += 1
     offspring = selTournament(population, len(population))
     offspring = list(map(clone, offspring))
@@ -98,8 +102,8 @@ while max(fitnessValues) < ONE_MAX_LENGTH and generationCounter < MAX_GENERATION
 
     best_index = fitnessValues.index(max(fitnessValues))
     print("Best individual: ", *population[best_index], "")
-    worst_index = fitnessValues.index(min(fitnessValues))
-    print("Worse individual: ", *population[worst_index], "\n")
+    #worst_index = fitnessValues.index(min(fitnessValues))
+    #print("Worse individual: ", *population[worst_index], "\n")
 
 plt.plot(maxFitnessValues, color='red')
 plt.plot(meanFitnessValues, color='green')
