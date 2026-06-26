@@ -17,8 +17,8 @@ random.seed(RANDOM_SEED)
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness = creator.FitnessMax)
 
-# def oneMaxFitness(ind):
-#     return sum(ind), # тюпл
+def oneMaxFitness(ind):
+    return sum(ind), # тюпл
 
 # def oneMaxFitness(ind):
 #     m = [x * (i - len(ind) / 2) if i > len(ind) / 2 else -(len(ind) / 2 - i) * x for i, x in enumerate(ind)]
@@ -28,13 +28,13 @@ creator.create("Individual", list, fitness = creator.FitnessMax)
 #     m = [-x * (i - len(ind) / 2) if i > len(ind) / 2 else (len(ind) / 2 - i) * x for i, x in enumerate(ind)]
 #     return sum(m),
 
-def oneMaxFitness(ind):
-    m = [
-        -x * abs(len(ind)/2 - i) if abs( len(ind)/2 - i )  > 10
-        else x * ( len(ind)/2 - abs(len(ind)/2 - i) )
-        for i, x in enumerate(ind)
-    ]
-    return sum(m),
+# def oneMaxFitness(ind):
+#     m = [
+#         -x * abs(len(ind)/2 - i) if abs( len(ind)/2 - i )  > 10
+#         else x * ( len(ind)/2 - abs(len(ind)/2 - i) )
+#         for i, x in enumerate(ind)
+#     ]
+#     return sum(m),
 
 toolbox = base.Toolbox()
 toolbox.register("zeroOrOne", random.randint, 0, 1)
@@ -69,6 +69,7 @@ toolbox.register("mutate", tools.mutFlipBit, indpb = 1.0 / ONE_MAX_LENGTH)
 stats = tools.Statistics(lambda ind: ind.fitness.values)
 stats.register("max", np.max)
 stats.register("mean", np.mean)
+stats.register("values", np.array)
 
 population, logbook = algorithms.eaSimple(
     population, toolbox,
@@ -79,7 +80,28 @@ population, logbook = algorithms.eaSimple(
     verbose=True
 )
 
-maxFitnessValues, meanFitnessValues = logbook.select("max", "mean")
+maxFitnessValues, meanFitnessValues, vals = logbook.select("max", "mean", "values")
+
+#print (len(vals))
+
+import time
+
+plt.ion()
+fig, ax = plt.subplots()
+
+line, = ax.plot(vals[0], ' o', markersize=1)
+ax.set_ylim(40, 110)
+
+for v in vals:
+    line.set_ydata(v)
+
+    plt.draw()
+    plt.gcf().canvas.flush_events()
+
+    time.sleep(0.5)
+
+plt.ioff()
+plt.show()
 
 # plt.plot(maxFitnessValues, color='red')
 # plt.plot(meanFitnessValues, color='green')
@@ -88,7 +110,7 @@ maxFitnessValues, meanFitnessValues = logbook.select("max", "mean")
 # plt.title("How max and mean fitness depends on generation")
 # plt.show()
 
-maxFitness = max(maxFitnessValues)
-print (maxFitness)
-best_ind = next((ind for ind in population if ind.fitness.values == maxFitness), None)
-print(best_ind)
+# maxFitness = max(maxFitnessValues)
+# print (maxFitness)
+# best_ind = next((ind for ind in population if ind.fitness.values == maxFitness), None)
+# print(best_ind)
