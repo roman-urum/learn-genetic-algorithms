@@ -1,20 +1,25 @@
+import math
+
 from deap import base, algorithms
 from deap import creator
 from deap import tools
 
-from graph_show import show_graph
+from graph_show_2 import show_graph2
 
 import random
 import matplotlib.pyplot as plt
 import numpy as np
 
+from graphpath.graph_show import show_graph
+
 inf = 100
-D = ((0, 3, 1, 3, inf, inf),
-     (3, 0, 4, inf, inf, inf),
-     (1, 4, 0, inf, 7, 5),
-     (3, inf, inf, 0, inf, 2),
-     (inf, inf, 7, inf, 0, 4),
-     (inf, inf, 5, 2, 4, 0))
+D = ((0, 3, 1, 3, math.inf, math.inf),
+     (3, 0, 4, math.inf, math.inf, math.inf),
+     (1, 4, 0, math.inf, 7, 5),
+     (3, math.inf, math.inf, 0, math.inf, 2),
+     (math.inf, math.inf, 7, math.inf, 0, 4),
+     (math.inf, math.inf, 5, 2, 4, 0)
+     )
 
 startV = 0              # стартовая вершина
 LENGTH_D = len(D)
@@ -43,5 +48,5 @@ toolbox.register("populationCreator", tools.initRepeat, list, toolbox.individual
 population = toolbox.populationCreator(n=POPULATION_SIZE)
 
 fig, ax = plt.subplots()
-show_graph(ax, population[0])
+show_graph2(D, ax, population[0])
 plt.show()
