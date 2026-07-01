@@ -9,7 +9,8 @@ vertex = (
     (0.5, 0.8),
     (0.1, 0.5),
     (0.8, 0.2),
-    (0.4, 0)
+    (0.4, 0),
+    (.9, .03)
 )
 
 vx = [v[0] for v in vertex]
@@ -35,7 +36,20 @@ def show_graph2(connectivity_matrix, ax, best):
             fontsize=11,
             weight="bold"
         )
-    if last iteration
+    if index == len(connections) - 1:
+        x_1 = vertex[connection[1]][0]
+        y_1 = vertex[connection[1]][1]
+        ax.annotate(
+            text=connection[1],
+            xy=(x_1, y_1),  # Pulls index 0 from your input data arrays
+            xytext=(0, 12),  # Pushes the text 12 pixel points straight up
+            textcoords="offset points",  # Guarantees the offset stays fixed during zoom
+            ha="center",  # Centers text box over the start point
+            va="bottom",  # Keeps text baseline sitting on top of offset
+            color="purple",
+            fontsize=11,
+            weight="bold"
+        )
 
     #how can I get last item in connections
     startV = 0
